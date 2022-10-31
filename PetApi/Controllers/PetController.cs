@@ -46,10 +46,10 @@ namespace PetApi.Controllers
             return pets.Find(pet => pet.Name == name);
         }
 
-        [HttpGet("findPetByType")]
+        [HttpGet("findPetsByType")]
         public List<Pet> FindPetsByType([FromQuery] string type)
         {
-            var findResult = pets.FindAll(item => item.Type.Equals(type));
+            var findResult = pets.FindAll(pet => pet.Type.Equals(type));
             return findResult;
         }
 

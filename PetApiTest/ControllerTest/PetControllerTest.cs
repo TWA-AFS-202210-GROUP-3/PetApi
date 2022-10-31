@@ -70,12 +70,13 @@ namespace PetApiTest.ControllerTest
             // given
             var application = new WebApplicationFactory<Program>();
             var httpclient = application.CreateClient();
+            await httpclient.DeleteAsync("/api/deleteAllPets");
             var pet = new Pet(name: "Kitty", type: "cat", color: "white", price: 1000);
             var serializeObject = JsonConvert.SerializeObject(pet);
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             await httpclient.PostAsync("/api/addNewPet", postBody);
             //when
-            var response = await httpclient.GetAsync("/api/getAllPet");
+            var response = await httpclient.GetAsync("/api/getAllPets");
             //then
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
@@ -151,34 +152,6 @@ namespace PetApiTest.ControllerTest
             Assert.Equal(500, priceNew);
         }
 
-        //[Fact]
-        //public async void Should_modifiy_the_price_successfully()
-        //{
-        //    // given
-        //    var application = new WebApplicationFactory<Program>();
-        //    var httpclient = application.CreateClient();
-        //    await httpclient.DeleteAsync("/api/deleteAllPets");
-        //    var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
-        //        new Pet(name: "Amy", type: "cat", color: "white", price: 2000),
-        //        new Pet(name: "Bob", type: "cat", color: "black", price: 1000) };
-        //    var serializeObject = JsonConvert.SerializeObject(pets);
-        //    var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-        //    // pets[0].Price = 500;
-        //    // var serializeObjectNew = JsonConvert.SerializeObject(pets);
-        //    // var patchPet1Price = new StringContent(serializeObjectNew, Encoding.UTF8, "application/json");
-        //    int price = 200;
-        //    var serializeObjectNew = JsonConvert.SerializeObject(price);
-        //    var patchPet1Price = new StringContent(serializeObjectNew, Encoding.UTF8, "application/json");
-        //    //when
-        //    var response = await httpclient.PatchAsync("/api/modifyPetPrice?Name=Kitty", patchPet1Price);
-        //    //then
-        //    response.EnsureSuccessStatusCode();
-        //    var responseBody = await response.Content.ReadAsStringAsync();
-        //    var petsnew = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
-        //    var pricenew = petsnew.Find(pet => pet.Name == "Kitty").Price;
-        //    Assert.Equal(200, pricenew);
-        //}
-
         [Fact]
         public async void Should_find_pets_by_type_successfully()
         {
@@ -196,7 +169,7 @@ namespace PetApiTest.ControllerTest
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             await httpclient.PostAsync("/api/addNewPets", postBody);
             //when
-            var response = await httpclient.GetAsync("/api/findPetsByType?Type=dog");
+            var response = await httpclient.GetAsync("/api/findPetsByType?type=dog");
             //then
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();

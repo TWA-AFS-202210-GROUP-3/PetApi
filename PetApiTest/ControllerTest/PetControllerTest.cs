@@ -125,40 +125,5 @@ namespace PetApiTest.ControllerTest
             var allPets = JsonConvert.DeserializeObject<List<Pet>>(allPetsBody);
             Assert.Empty(allPets);
         }
-
-        [Fact]
-        public async void Should_modify_pet_price()
-        {
-            //given
-            var application = new WebApplicationFactory<Program>();
-            var httpClient = application.CreateClient();
-            await httpClient.DeleteAsync("api/delAllPets");
-
-            /*
-             * Method: PATCH
-             * URI: /api/modifyPetPrice?name=xxx&price=xxx
-             * Body
-
-             */
-
-            var pet = new Pet("Kitty", "cat", "white", 1000);
-            var serializeObject = JsonConvert.SerializeObject(pet);
-            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-            await httpClient.PostAsync("/api/addNewPet", postBody);
-
-            pet.Price = 200;
-            var newSerializeObject = JsonConvert.SerializeObject(pet);
-            var newPostBody = new StringContent(newSerializeObject, Encoding.UTF8, "application/json");
-
-            //when
-            await httpClient.PatchAsync("/api/modifyPetPrice", newPostBody);
-
-            //then
-            var allPetsResponse = await httpClient.GetAsync("/api/getAllPets");
-            allPetsResponse.EnsureSuccessStatusCode();
-            var allPetsBody = await allPetsResponse.Content.ReadAsStringAsync();
-            var allPets = JsonConvert.DeserializeObject<List<Pet>>(allPetsBody);
-            Assert.Equal(200, allPets[0].Price);
-        }
     }
 }

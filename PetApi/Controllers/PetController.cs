@@ -28,5 +28,19 @@ namespace PetApi.Controllers
         {
             return pets.First(pet => pet.Name.Equals(name));
         }
+
+        [HttpDelete("deleteAllPets")]
+        public void DeleteAllPets()
+        {
+            pets.Clear();
+        }
+
+        [HttpDelete("deleteSoldPet")]
+        public List<Pet> DeleteSoldPet(string name)
+        {
+            var soldPets = pets.First(_ => _.Name.Equals(name));
+            pets.Remove(soldPets);
+            return pets;
+        }
     }
 }

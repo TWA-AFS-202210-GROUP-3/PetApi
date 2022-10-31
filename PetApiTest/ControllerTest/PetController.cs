@@ -14,9 +14,10 @@ namespace PetApiTest.ControllerTest
         [Fact]
         public async void Should_add_new_pet_to_system_successfully()
         {
-            //givn
+            //given
             var application = new WebApplicationFactory<Program>();
             var httpClient = application.CreateClient();
+            await httpClient.DeleteAsync("/api/deleteAllPets");
             /*
              * Method: POST
              * URI: api/addNewPet
@@ -43,19 +44,10 @@ namespace PetApiTest.ControllerTest
         [Fact]
         public async void Should_get_all_pets_to_system_successfully()
         {
-            //givn
+            //given
             var application = new WebApplicationFactory<Program>();
             var httpClient = application.CreateClient();
-            /*
-             * Method: POST
-             * URI: api/addNewPet
-             * Body:
-             * {
-             *   "name": "bob",
-             *    "type":"cat",
-             *   "color":"black",
-             * "price": 2000,
-             */
+            await httpClient.DeleteAsync("/api/deleteAllPets");
             var pet = new Pet(name: "bob", type: "cat", color: "black", price: 2000);
             var serializedObject = JsonConvert.SerializeObject(pet);
             var postBody = new StringContent(serializedObject, Encoding.UTF8, "application/json");
@@ -72,19 +64,10 @@ namespace PetApiTest.ControllerTest
         [Fact]
         public async void Should_find_pet_by_name_successfully()
         {
-            //givn
+            //given
             var application = new WebApplicationFactory<Program>();
             var httpClient = application.CreateClient();
-            /*
-             * Method: POST
-             * URI: api/addNewPet
-             * Body:
-             * {
-             *   "name": "bob",
-             *    "type":"cat",
-             *   "color":"black",
-             * "price": 2000,
-             */
+            await httpClient.DeleteAsync("/api/deleteAllPets");
             var pet = new Pet(name: "bob", type: "cat", color: "black", price: 2000);
             var serializedObject = JsonConvert.SerializeObject(pet);
             var postBody = new StringContent(serializedObject, Encoding.UTF8, "application/json");
@@ -94,8 +77,28 @@ namespace PetApiTest.ControllerTest
             //then
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
-            var pet1 = JsonConvert.DeserializeObject<Pet>(responseBody);
-            Assert.Equal("bob", pet1.Name);
+            var actualPets = JsonConvert.DeserializeObject<Pet>(responseBody);
+            Assert.Equal(pet, actualPets);
+        }
+
+        [Fact]
+        public async void Should_delete_pet_when_sold_out()
+        {
+            //given
+            var application = new WebApplicationFactory<Program>();
+            var httpClient = application.CreateClient();
+            await httpClient.DeleteAsync("/api/deleteAllPets");
+            var pet = new Pet(name: "bob", type: "cat", color: "black", price: 2000);
+            var serializedObject = JsonConvert.SerializeObject(pet);
+            var postBody = new StringContent(serializedObject, Encoding.UTF8, "application/json");
+            await httpClient.PostAsync("api/addNewPet", postBody);
+            //when
+            var response = await httpClient.DeleteAsync("api/deleteSoldPet?name=bob");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var actualPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Empty(actualPets);
         }
     }
 }

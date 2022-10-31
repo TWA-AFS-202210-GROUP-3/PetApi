@@ -67,6 +67,13 @@ namespace PetApi.Controllers
             return matchedPets;
         }
 
+        [HttpGet("findPetsByColor")]
+        public List<Pet> FindPetsByColor([FromQuery] string color)
+        {
+            var findResult = pets.FindAll(item => item.Color.Equals(color));
+            return findResult;
+        }
+
         [HttpDelete("deletePetByName")]
         public List<Pet> DeletePetByName([FromQuery] string Name)
         {
@@ -80,12 +87,5 @@ namespace PetApi.Controllers
            pets.Find(pet => pet.Name == petNew.Name).Price = petNew.Price;
            return pets;
         }
-
-        //[HttpPatch("modifyPetPrice")]
-        //public List<Pet> ModifyPetPrice([FromQuery] string Name, int price)
-        //{
-        //    pets.Find(pet => pet.Name == Name).Price = price;
-        //    return pets;
-        //}
     }
 }

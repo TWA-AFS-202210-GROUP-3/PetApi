@@ -68,6 +68,7 @@ namespace PetApiTest.ControllerTest
             var allPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
             Assert.Equal(pet, allPets[0]);
         }
+
         [Fact]
         public async void Should_find_pet_by_name_successfully()
         {
@@ -89,12 +90,12 @@ namespace PetApiTest.ControllerTest
             var postBody = new StringContent(serializedObject, Encoding.UTF8, "application/json");
             await httpClient.PostAsync("api/addNewPet", postBody);
             //when
-            var response = await httpClient.GetAsync("api/getAllPets");
+            var response = await httpClient.GetAsync("api/findPetsByName?name=bob");
             //then
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
-            var allPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
-            Assert.Equal(pet, allPets[0]);
+            var pet1 = JsonConvert.DeserializeObject<Pet>(responseBody);
+            Assert.Equal("bob", pet1.Name);
         }
     }
 }

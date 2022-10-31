@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using PetApi.Model;
 
@@ -20,6 +21,12 @@ namespace PetApi.Controllers
         public List<Pet> GetAllPets()
         {
             return pets;
+        }
+
+        [HttpGet("findPetsByName")]
+        public Pet FindPetsByName(string name)
+        {
+            return pets.First(pet => pet.Name.Equals(name));
         }
     }
 }

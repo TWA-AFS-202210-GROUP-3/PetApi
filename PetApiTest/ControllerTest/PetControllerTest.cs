@@ -76,6 +76,26 @@ namespace PetApiTest.ControllerTest
             var matchedPet = JsonConvert.DeserializeObject<Pet>(resonseBody);
             Assert.Equal(pet, matchedPet);
         }
+
+        [Fact]
+        public async void Should_delete_one_pet_when_one_pet_was_purchased()
+        {
+            var application = new WebApplicationFactory<Program>();
+            var httpClient = application.CreateClient();
+            await httpClient.DeleteAsync("/api/deleteAllPets");
+
+            var pet = new Pet(name: "Kitty", type: "cat", color: "white", price: 1000);
+            var serializeObject = JsonConvert.SerializeObject(pet);
+            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+            await httpClient.PostAsync("/api/addNewPet", postBody);
+
+            var response = await httpClient.PatchAsync("/api/removeOnePet", postBody);
+            //then
+            response.EnsureSuccessStatusCode();
+            var resonseBody = await response.Content.ReadAsStringAsync();
+            var matchedPets = JsonConvert.DeserializeObject<List<Pet>>(resonseBody);
+            Assert.Equal(new List<Pet>(), matchedPets);
+        }
     }
 }
 

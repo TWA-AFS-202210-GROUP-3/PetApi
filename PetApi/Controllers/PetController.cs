@@ -29,6 +29,14 @@ namespace PetApi.Controllers
             return pets.Find(pet => pet.Name.Equals(name));
         }
 
+        [HttpPatch("removeOnePet")]
+        public List<Pet> RemoveOnePet(Pet pet)
+        {
+            var matchedPet = pets.Find(item => item.Name.Equals(pet.Name));
+            pets.Remove(matchedPet);
+            return pets;
+        }
+
         [HttpDelete("deleteAllPets")]
         public List<Pet> DeleteAllPets()
         {

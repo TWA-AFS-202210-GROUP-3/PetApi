@@ -23,10 +23,28 @@ namespace PetApi.Controllers
             return pets;
         }
 
-        [HttpGet("findPetsByName")]
-        public Pet FindPetsByName(string name)
+        [HttpGet("findPetByName")]
+        public Pet FindPetByName(string name)
         {
             return pets.First(pet => pet.Name.Equals(name));
+        }
+
+        [HttpGet("findPetsByType")]
+        public List<Pet> FindPetsByType(string type)
+        {
+            return pets.FindAll(pet => pet.Type.Equals(type));
+        }
+
+        [HttpGet("findPetsByColor")]
+        public List<Pet> FindPetsByColor(string color)
+        {
+            return pets.FindAll(pet => pet.Color.Equals(color));
+        }
+
+        [HttpGet("findPetsByPriceRange")]
+        public List<Pet> FindPetsByPriceRange(int min, int max)
+        {
+            return pets.FindAll(pet => pet.Price >= min && pet.Price <= max);
         }
 
         [HttpDelete("deleteAllPets")]

@@ -41,5 +41,12 @@ namespace PetApi.Controllers
             var petFound = pets.Find(pet => pet.Name == name);
             pets.Remove(petFound);
         }
+
+        [HttpPatch("modifyPetPrice")]
+        public void ModifyPetPrice(Pet petModified)
+        {
+            pets.Find(pet => pet.Name == petModified.Name).Price = petModified.Price;
+
+        }
     }
 }

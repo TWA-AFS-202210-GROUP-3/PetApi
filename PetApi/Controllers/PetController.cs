@@ -32,25 +32,33 @@ namespace PetApi.Controllers
         [HttpGet("findPetsByType")]
         public List<Pet> FindPetsByType(string type)
         {
-            return pets.FindAll(pet => pet.Type.Equals(type));
+            return pets.FindAll(_ => _.Type.Equals(type));
         }
 
         [HttpGet("findPetsByColor")]
         public List<Pet> FindPetsByColor(string color)
         {
-            return pets.FindAll(pet => pet.Color.Equals(color));
+            return pets.FindAll(_ => _.Color.Equals(color));
         }
 
         [HttpGet("findPetsByPriceRange")]
         public List<Pet> FindPetsByPriceRange(int min, int max)
         {
-            return pets.FindAll(pet => pet.Price >= min && pet.Price <= max);
+            return pets.FindAll(_ => _.Price >= min && _.Price <= max);
         }
 
         [HttpDelete("deleteAllPets")]
         public void DeleteAllPets()
         {
             pets.Clear();
+        }
+
+        [HttpPatch("PetPriceModification")]
+        public Pet petPriceModification(Pet pet)
+        {
+            var newpet = pets.First(_ => _.Name.Equals(_.Name));
+            newpet.Price = pet.Price;
+            return newpet;
         }
 
         [HttpDelete("deleteSoldPet")]

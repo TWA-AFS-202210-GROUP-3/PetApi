@@ -173,10 +173,27 @@ namespace PetApiTest.ControllerTest
         //    Assert.Equal(200, pricenew);
         //}
 
-
-
-
-
+        [Fact]
+        public async void Should_find_pets_by_type_successfully()
+        {
+            // given
+            var application = new WebApplicationFactory<Program>();
+            var httpclient = application.CreateClient();
+            await httpclient.DeleteAsync("/api/deleteAllPets");
+            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
+                    new Pet(name: "Amy", type: "dog", color: "white", price: 2000),
+                    new Pet(name: "Bob", type: "cat", color: "black", price: 1000) };
+            var serializeObject = JsonConvert.SerializeObject(pets);
+            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+            await httpclient.PostAsync("/api/addNewPets", postBody);
+            //when
+            var response = await httpclient.GetAsync("/api/findPetByType?Type=dog");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var petsNew = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(2, petsNew.Count);
+        }
         /*
 
 AC6: I can find pets by type. / 

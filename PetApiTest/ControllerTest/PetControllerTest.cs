@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PetApiTest.ControllerTest
@@ -53,9 +54,7 @@ namespace PetApiTest.ControllerTest
              */
 
             var pet = new Pet("Kitty", "cat", "white", 1000);
-            var serializeObject = JsonConvert.SerializeObject(pet);
-            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-            await httpClient.PostAsync("/api/addNewPet", postBody);
+            await PostNewPet(httpClient, pet);
 
             //when
             var response = await httpClient.GetAsync("/api/getAllPets");
@@ -80,11 +79,8 @@ namespace PetApiTest.ControllerTest
              * Body
 
              */
-
             var pet = new Pet("Kitty", "cat", "white", 1000);
-            var serializeObject = JsonConvert.SerializeObject(pet);
-            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-            await httpClient.PostAsync("/api/addNewPet", postBody);
+            await PostNewPet(httpClient, pet);
 
             //when
             var response = await httpClient.GetAsync("/api/getPetByName?name=Kitty");
@@ -111,9 +107,7 @@ namespace PetApiTest.ControllerTest
              */
 
             var pet = new Pet("Kitty", "cat", "white", 1000);
-            var serializeObject = JsonConvert.SerializeObject(pet);
-            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-            await httpClient.PostAsync("/api/addNewPet", postBody);
+            await PostNewPet(httpClient, pet);
 
             //when
             await httpClient.DeleteAsync("/api/delPetByName?name=Kitty");
@@ -136,15 +130,13 @@ namespace PetApiTest.ControllerTest
 
             /*
              * Method: PATCH
-             * URI: /api/modifyPetPrice?name=xxx&price=xxx
+             * URI: /api/modifyPetPrice
              * Body
 
              */
 
             var pet = new Pet("Kitty", "cat", "white", 1000);
-            var serializeObject = JsonConvert.SerializeObject(pet);
-            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-            await httpClient.PostAsync("/api/addNewPet", postBody);
+            await PostNewPet(httpClient, pet);
 
             pet.Price = 200;
             var newSerializeObject = JsonConvert.SerializeObject(pet);
@@ -159,6 +151,45 @@ namespace PetApiTest.ControllerTest
             var allPetsBody = await allPetsResponse.Content.ReadAsStringAsync();
             var allPets = JsonConvert.DeserializeObject<List<Pet>>(allPetsBody);
             Assert.Equal(200, allPets[0].Price);
+        }
+
+        [Fact]
+        public async void Should_find_pet_by_type()
+        {
+            //given
+            var application = new WebApplicationFactory<Program>();
+            var httpClient = application.CreateClient();
+            await httpClient.DeleteAsync("api/delAllPets");
+
+            /*
+             * Method: GET
+             * URI: /api/getPetByType?type=xxx
+
+             */
+
+            var pet = new Pet("Kitty", "cat", "white", 1000);
+            await PostNewPet(httpClient, pet);
+
+            var cat2 = new Pet("Lili", "cat", "gold", 4000);
+            await PostNewPet(httpClient, cat2);
+
+            var dog = new Pet("Tom", "dog", "black", 2000);
+            await PostNewPet(httpClient, dog);
+
+            //when
+            var response = await httpClient.GetAsync("/api/getPetByType?type=cat");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var petsOfTypeCat = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(2, petsOfTypeCat.Count);
+        }
+
+        private static async Task PostNewPet(HttpClient httpClient, Pet pet)
+        {
+            var serializeObject = JsonConvert.SerializeObject(pet);
+            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+            await httpClient.PostAsync("/api/addNewPet", postBody);
         }
     }
 }

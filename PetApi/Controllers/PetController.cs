@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetApiTest.ControllerTest;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PetApi.Controllers
 {
@@ -46,7 +47,12 @@ namespace PetApi.Controllers
         public void ModifyPetPrice(Pet petModified)
         {
             pets.Find(pet => pet.Name == petModified.Name).Price = petModified.Price;
+        }
 
+        [HttpGet("getPetByType")]
+        public List<Pet> GetPetByType([FromQuery] string type)
+        {
+            return pets.Where(pet => pet.Type == type).ToList();
         }
     }
 }

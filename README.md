@@ -21,3 +21,8 @@ AC6: I can find pets by type.
 AC7: I can find pets by price range.
 
 AC8: I can find pets by color.
+
+O: Today we learnt how to build a web api and matched the bussiness requirement above.
+R: Very useful for me.
+I: It is a very useful way to test web api and useful for my future work.
+D: I will use this method in my future career, which can help me be more efficent.

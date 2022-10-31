@@ -41,24 +41,17 @@ namespace PetApi.Controllers
         }
 
         [HttpGet("findPetByName")]
-        public Pet FindPetByName([FromQuery] string Name)
+        public Pet FindPetByName([FromQuery] string name)
         {
-            return pets.Find(pet => pet.Name == Name);
+            return pets.Find(pet => pet.Name == name);
         }
 
         [HttpGet("findPetByType")]
-        public List<Pet> FindPetsByType([FromQuery] string Type)
+        public List<Pet> FindPetsByType([FromQuery] string type)
         {
-            var findResult = pets.FindAll(item => item.Type.Equals(Type));
+            var findResult = pets.FindAll(item => item.Type.Equals(type));
             return findResult;
         }
-
-        //[HttpGet("findPetsByPriceRange")]
-        //public List<Pet> FindPetsByPriceRange([FromQuery] string minPrice, [FromQuery] string maxPrice)
-        //{
-        //    var findResult = pets.FindAll(pet => pet.Price >= int.Parse(minPrice) && pet.Price <= int.Parse(maxPrice));
-        //    return findResult;
-        //}
 
         [HttpGet("findPetsByPriceRange")]
         public List<Pet> FindPetsByPriceRange([FromQuery] string min, [FromQuery] string max)
@@ -75,9 +68,9 @@ namespace PetApi.Controllers
         }
 
         [HttpDelete("deletePetByName")]
-        public List<Pet> DeletePetByName([FromQuery] string Name)
+        public List<Pet> DeletePetByName([FromQuery] string name)
         {
-            pets.Remove(pets.Find(pet => pet.Name == Name));
+            pets.Remove(pets.Find(pet => pet.Name == name));
             return pets;
         }
 

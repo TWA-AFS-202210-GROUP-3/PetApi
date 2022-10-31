@@ -48,9 +48,12 @@ namespace PetApiTest.ControllerTest
             var application = new WebApplicationFactory<Program>();
             var httpclient = application.CreateClient();
             await httpclient.DeleteAsync("/api/deleteAllPets");
-            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
+            var pets = new List<Pet>
+            {
+                new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
                 new Pet(name: "Amy", type: "cat", color: "white", price: 2000),
-                new Pet(name: "Bob", type: "cat", color: "black", price: 1000) };
+                new Pet(name: "Bob", type: "cat", color: "black", price: 1000)
+            };
             var serializeObject = JsonConvert.SerializeObject(pets);
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             // when
@@ -107,9 +110,12 @@ namespace PetApiTest.ControllerTest
             var application = new WebApplicationFactory<Program>();
             var httpclient = application.CreateClient();
             await httpclient.DeleteAsync("/api/deleteAllPets");
-            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
+            var pets = new List<Pet>
+            {
+                new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
                 new Pet(name: "Amy", type: "cat", color: "white", price: 2000),
-                new Pet(name: "Bob", type: "cat", color: "black", price: 1000) };
+                new Pet(name: "Bob", type: "cat", color: "black", price: 1000)
+            };
             var serializeObject = JsonConvert.SerializeObject(pets);
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             //when
@@ -180,9 +186,12 @@ namespace PetApiTest.ControllerTest
             var application = new WebApplicationFactory<Program>();
             var httpclient = application.CreateClient();
             await httpclient.DeleteAsync("/api/deleteAllPets");
-            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
-                    new Pet(name: "Amy", type: "dog", color: "white", price: 2000),
-                    new Pet(name: "Bob", type: "cat", color: "black", price: 1000) };
+            var pets = new List<Pet>
+            {
+                new Pet(name: "Kitty", type: "dog", color: "white", price: 500),
+                new Pet(name: "Amy", type: "dog", color: "white", price: 2000),
+                new Pet(name: "Bob", type: "cat", color: "black", price: 1000)
+            };
             var serializeObject = JsonConvert.SerializeObject(pets);
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             await httpclient.PostAsync("/api/addNewPets", postBody);
@@ -202,9 +211,12 @@ namespace PetApiTest.ControllerTest
             var application = new WebApplicationFactory<Program>();
             var httpclient = application.CreateClient();
             await httpclient.DeleteAsync("/api/deleteAllPets");
-            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 510),
+            var pets = new List<Pet>
+            {
+                new Pet(name: "Kitty", type: "dog", color: "white", price: 510),
                 new Pet(name: "Amy", type: "dog", color: "white", price: 2000),
-                new Pet(name: "Bob", type: "cat", color: "black", price: 900) };
+                new Pet(name: "Bob", type: "cat", color: "black", price: 900)
+            };
             var serializeObject = JsonConvert.SerializeObject(pets);
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             await httpclient.PostAsync("/api/addNewPets", postBody);
@@ -224,9 +236,12 @@ namespace PetApiTest.ControllerTest
             var application = new WebApplicationFactory<Program>();
             var httpclient = application.CreateClient();
             await httpclient.DeleteAsync("/api/deleteAllPets");
-            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 510),
+            var pets = new List<Pet>
+            {
+                new Pet(name: "Kitty", type: "dog", color: "white", price: 510),
                 new Pet(name: "Amy", type: "dog", color: "white", price: 2000),
-                new Pet(name: "Bob", type: "cat", color: "black", price: 900) };
+                new Pet(name: "Bob", type: "cat", color: "black", price: 900)
+            };
             var serializeObject = JsonConvert.SerializeObject(pets);
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             await httpclient.PostAsync("/api/addNewPets", postBody);

@@ -59,6 +59,13 @@ namespace PetApi.Controllers
             return matchedPets;
         }
 
+        [HttpGet("getPetsByColor")]
+        public List<Pet> GetPetsByColor([FromQuery] string color)
+        {
+            var matchedPets = pets.FindAll(pet => pet.Color.Equals(color));
+            return matchedPets;
+        }
+
         [HttpDelete("deleteAllPets")]
         public List<Pet> DeleteAllPets()
         {

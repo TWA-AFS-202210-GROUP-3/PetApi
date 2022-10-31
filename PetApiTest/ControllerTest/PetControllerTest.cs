@@ -185,6 +185,38 @@ namespace PetApiTest.ControllerTest
             Assert.Equal(2, petsOfTypeCat.Count);
         }
 
+        [Fact]
+        public async void Should_find_pet_by_price_range()
+        {
+            //given
+            var application = new WebApplicationFactory<Program>();
+            var httpClient = application.CreateClient();
+            await httpClient.DeleteAsync("api/delAllPets");
+
+            /*
+             * Method: GET
+             * URI: /api/getPetByPriceRange?lowestPrice=xxx&highestPrice=xxx
+
+             */
+
+            var pet = new Pet("Kitty", "cat", "white", 1000);
+            await PostNewPet(httpClient, pet);
+
+            var cat2 = new Pet("Lili", "cat", "gold", 4000);
+            await PostNewPet(httpClient, cat2);
+
+            var dog = new Pet("Tom", "dog", "black", 2000);
+            await PostNewPet(httpClient, dog);
+
+            //when
+            var response = await httpClient.GetAsync("/api/getPetByPriceRange?lowestPrice=999&highestPrice=3000");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var petsInPriceRange = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(2, petsInPriceRange.Count);
+        }
+
         private static async Task PostNewPet(HttpClient httpClient, Pet pet)
         {
             var serializeObject = JsonConvert.SerializeObject(pet);

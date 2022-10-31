@@ -54,5 +54,11 @@ namespace PetApi.Controllers
         {
             return pets.Where(pet => pet.Type == type).ToList();
         }
+
+        [HttpGet("getPetByPriceRange")]
+        public List<Pet> GetPetByPriceRange([FromQuery] int lowestPrice, int highestPrice)
+        {
+            return pets.Where(pet => pet.Price >= lowestPrice && pet.Price <= highestPrice).ToList();
+        }
     }
 }

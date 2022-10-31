@@ -23,7 +23,6 @@
                 Type.Equals(pet.Type) &&
                 Color.Equals(pet.Color) &&
                 Price.Equals(pet.Price);
-
         }
     }
 }

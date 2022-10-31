@@ -137,6 +137,36 @@ namespace PetApiTest.ControllerTest
             Assert.True(pets.Find(pet => pet.Name == "Kitty") == null);
         }
 
+        [Fact]
+        public async void Should_modifiy_the_price_successfully()
+        {
+            // given
+            var application = new WebApplicationFactory<Program>();
+            var httpclient = application.CreateClient();
+            await httpclient.DeleteAsync("/api/deleteAllPets");
+            var pet1 = new Pet(name: "Kitty", type: "cat", color: "white", price: 1000);
+            var serializeObject1 = JsonConvert.SerializeObject(pet1);
+            var postBody1 = new StringContent(serializeObject1, Encoding.UTF8, "application/json");
+            await httpclient.PostAsync("/api/addNewPet", postBody1);
+            var pet2 = new Pet(name: "Amy", type: "bog", color: "white", price: 1000);
+            var serializeObject2 = JsonConvert.SerializeObject(pet2);
+            var postBody2 = new StringContent(serializeObject2, Encoding.UTF8, "application/json");
+            await httpclient.PostAsync("/api/addNewPet", postBody2);
+            pet1.Price = 500;
+            var serializeObject1New = JsonConvert.SerializeObject(pet1);
+            var patchPet1Price = new StringContent(serializeObject1New, Encoding.UTF8, "application/json");
+            //when
+            var response = await httpclient.PatchAsync("/api/modifyPetPrice", patchPet1Price);
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var pets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            var price = pets.Find(pet => pet.Name == "Kitty").Price;
+            Assert.Equal(500, price);
+        }
+
+
+
         /*
  *AC3: I can find pet by its name. findPetByName  / get
 

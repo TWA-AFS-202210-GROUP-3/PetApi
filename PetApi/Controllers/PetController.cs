@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc;
 using PetApiTest.Controller;
 
@@ -42,6 +43,13 @@ namespace PetApi.Controllers
         public List<Pet> DeletePetByName([FromQuery] string Name)
         {
             pets.Remove(pets.Find(pet => pet.Name == Name));
+            return pets;
+        }
+
+        [HttpPatch("modifyPetPrice")]
+        public List<Pet> ModifyPetPrice(Pet petNew)
+        {
+            pets.Find(pet => pet.Name == petNew.Name).Price = petNew.Price;
             return pets;
         }
     }

@@ -37,6 +37,14 @@ namespace PetApi.Controllers
             return pets;
         }
 
+        [HttpPatch("editPetPrice")]
+        public Pet EditPetPrice(Pet pet)
+        {
+            var matchedPet = pets.Find(item => item.Name.Equals(pet.Name));
+            matchedPet.Price = pet.Price;
+            return matchedPet;
+        }
+
         [HttpDelete("deleteAllPets")]
         public List<Pet> DeleteAllPets()
         {

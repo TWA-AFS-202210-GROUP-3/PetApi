@@ -14,10 +14,17 @@ namespace PetApi.Controllers
         private static List<Pet> pets = new List<Pet>();
 
         [HttpPost("addNewPet")]
-        public Pet AddNewPet(Pet pet)
+        public Pet AddNewPet(Pet addPet)
         {
-            pets.Add(pet);
-            return pet;
+            pets.Add(addPet);
+            return addPet;
+        }
+
+        [HttpPost("addNewPets")]
+        public List<Pet> AddNewPets(List<Pet> addPets)
+        {
+            pets.AddRange(addPets);
+            return pets;
         }
 
         [HttpGet("getAllPets")]
@@ -49,8 +56,15 @@ namespace PetApi.Controllers
         [HttpPatch("modifyPetPrice")]
         public List<Pet> ModifyPetPrice(Pet petNew)
         {
-            pets.Find(pet => pet.Name == petNew.Name).Price = petNew.Price;
-            return pets;
+           pets.Find(pet => pet.Name == petNew.Name).Price = petNew.Price;
+           return pets;
         }
+
+        //[HttpPatch("modifyPetPrice")]
+        //public List<Pet> ModifyPetPrice([FromQuery] string Name, int price)
+        //{
+        //    pets.Find(pet => pet.Name == Name).Price = price;
+        //    return pets;
+        //}
     }
 }

@@ -49,8 +49,22 @@ namespace PetApi.Controllers
         [HttpGet("findPetByType")]
         public List<Pet> FindPetsByType([FromQuery] string Type)
         {
-            List<Pet> findResult = pets.FindAll(item => item.Type.Equals(Type));
+            var findResult = pets.FindAll(item => item.Type.Equals(Type));
             return findResult;
+        }
+
+        //[HttpGet("findPetsByPriceRange")]
+        //public List<Pet> FindPetsByPriceRange([FromQuery] string minPrice, [FromQuery] string maxPrice)
+        //{
+        //    var findResult = pets.FindAll(pet => pet.Price >= int.Parse(minPrice) && pet.Price <= int.Parse(maxPrice));
+        //    return findResult;
+        //}
+
+        [HttpGet("findPetsByPriceRange")]
+        public List<Pet> FindPetsByPriceRange([FromQuery] string min, [FromQuery] string max)
+        {
+            var matchedPets = pets.FindAll(pet => pet.Price >= int.Parse(min) && pet.Price <= int.Parse(max));
+            return matchedPets;
         }
 
         [HttpDelete("deletePetByName")]

@@ -187,16 +187,36 @@ namespace PetApiTest.ControllerTest
             var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
             await httpclient.PostAsync("/api/addNewPets", postBody);
             //when
-            var response = await httpclient.GetAsync("/api/findPetByType?Type=dog");
+            var response = await httpclient.GetAsync("/api/findPetsByType?Type=dog");
             //then
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
-            var petsNew = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
-            Assert.Equal(2, petsNew.Count);
+            var matchedpPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(2, matchedpPets.Count);
+        }
+
+        [Fact]
+        public async void Should_find_pets_by_price_range_successfully()
+        {
+            // given
+            var application = new WebApplicationFactory<Program>();
+            var httpclient = application.CreateClient();
+            await httpclient.DeleteAsync("/api/deleteAllPets");
+            var pets = new List<Pet> { new Pet(name: "Kitty", type: "dog", color: "white", price: 510),
+                new Pet(name: "Amy", type: "dog", color: "white", price: 2000),
+                new Pet(name: "Bob", type: "cat", color: "black", price: 900) };
+            var serializeObject = JsonConvert.SerializeObject(pets);
+            var postBody = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+            await httpclient.PostAsync("/api/addNewPets", postBody);
+            //when
+            var response = await httpclient.GetAsync("/api/findPetsByPriceRange?min=500&max=1000");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var matchedpPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(2, matchedpPets.Count);
         }
         /*
-
-AC6: I can find pets by type. / 
 
 AC7: I can find pets by price range.
 
